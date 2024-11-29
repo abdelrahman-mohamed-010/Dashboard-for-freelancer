@@ -14,7 +14,8 @@ export default {
         blue: "rgba(0, 109, 180, 1)",
         second_blue: "rgba(15, 184, 206, 1)",
         light_blue: "rgba(230, 245, 255, 1)",
-        main_gray:"rgba(236, 236, 236, 1)"
+        main_gray:"rgba(236, 236, 236, 1)",
+        test:"#0FB8CE"
       },
       borderColor: {
         "light-gray": "rgba(236, 236, 236, 1)", // Add custom border color

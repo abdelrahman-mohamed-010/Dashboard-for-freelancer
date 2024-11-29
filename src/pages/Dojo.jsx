@@ -1,7 +1,19 @@
 import { Search } from "lucide-react";
 import UseCases from "../components/useCases";
+import { useState } from "react";
 
 const Dojo = () => {
+  const [selectedSector, setSelectedSector] = useState("bg-second_blue");
+
+  const handleSelectedColor = () => {
+    if (selectedSector === "bg-second_blue") {
+      setSelectedSector("bg-blue");
+    }else{
+      setSelectedSector("bg-second_blue");
+
+    }
+  };
+
   return (
     <section className=" p-6 w-full">
       <div className=" bg-primary rounded-xl w-full p-3">
@@ -28,7 +40,10 @@ const Dojo = () => {
               placeholder="search"
             />
           </div>
-          <button className="bg-blue cursor-pointer tracking-wide text-white font-semibold text-[14px] rounded-lg p-2  ">
+          <button
+            onClick={handleSelectedColor}
+            className={`${selectedSector} cursor-pointer tracking-wide text-white font-semibold text-[14px] rounded-lg p-2  `}
+          >
             Optimize Use Case
           </button>
           <button className="bg-second_blue cursor-pointer tracking-wide text-white font-semibold text-[14px] rounded-lg p-2  ">
@@ -47,8 +62,10 @@ const Dojo = () => {
           </li>
         ))}
       </ul>
-      <h1 className=" my-3 font-bold text-[16px] font-poppins">Create and Optimize Use Cases</h1>
-      <UseCases/>
+      <h1 className=" my-3 font-bold text-[16px] font-poppins">
+        Create and Optimize Use Cases
+      </h1>
+      <UseCases />
     </section>
   );
 };
