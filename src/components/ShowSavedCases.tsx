@@ -17,47 +17,49 @@ interface DownloadModalProps {
 const ShowModal: React.FC<DownloadModalProps> = ({ onClose, useCases }) => {
   return (
     <motion.div
-      className=" fixed inset-0  bg-opacity-50 flex items-center justify-end mr-4 z-50  "
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-end z-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
+      onClick={onClose} // Close modal when clicking outside
     >
       <motion.div
-        className="bg-white  shadow-lg rounded-lg max-w-md w-full p-6 relative h-[calc(100%-2rem)] "
+        className="bg-white shadow-lg rounded-lg max-w-md w-full p-6 relative h-[calc(100%-2rem)] mr-5 overflow-hidden scrollbar-hide"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
       >
-        <div className="flex items-center justify-between ">
-          <h1 className="text-3xl font-bold font-poppins">Your User Cases</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-3xl font-bold font-poppins">Your Use Cases</h1>
           <IoClose
-            className=" font-bold w-9 h-9 mt-2 cursor-pointer"
+            className="font-bold w-9 h-9 mt-2 cursor-pointer"
             onClick={onClose}
           />
         </div>
-        <div>
+        <div className=" overflow-y-scroll h-full scrollbar-hide">
           {useCases.length > 0 &&
             useCases.map((caseItem) => (
-              <div className="bg-white border-2 p-4 rounded-xl my-6 ">
-                <div className=" flex items-start justify-between mb-4">
+              <div
+                key={caseItem.usecase}
+                className="bg-white border-2 p-4 rounded-xl my-6"
+              >
+                <div className="flex items-start justify-between mb-4">
                   <div>
-                    <span
-                      key={caseItem.usecase}
-                      className=" w-[186px]  font-semibold r"
-                    >
+                    <span className="w-[186px] font-semibold">
                       Use Case {caseItem.usecase}
                     </span>
-                    <p className=" text-gray-400 text-sm">Loprem</p>
+                    <p className="text-gray-400 text-sm">Loprem</p>
                   </div>
-                  <div className=" text-tertiary text-sm bg-light_blue rounded-xl p-2 px-5">
+                  <div className="text-tertiary text-sm bg-light_blue rounded-xl p-2 px-5">
                     Live
                   </div>
                 </div>
-                <div className=" flex items-start justify-end">
-                  <button className="  border-2 mr-4 rounded-xl p-2 px-7 text-sm mt-2  tracking-wider">
+                <div className="flex items-start justify-end">
+                  <button className="border-2 mr-4 rounded-xl p-2 px-7 text-sm mt-2 tracking-wider">
                     Edit Workflow
                   </button>
-                  <button className=" bg-tertiary text-white rounded-xl p-2 px-7 text-sm mt-2  tracking-wider">
+                  <button className="bg-tertiary text-white rounded-xl p-2 px-7 text-sm mt-2 tracking-wider">
                     Save
                   </button>
                 </div>
