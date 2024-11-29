@@ -29,11 +29,8 @@ const initialNodes: Node[] = [
         </div>
       ),
     },
-    type: "custom",
     position: { x: 400, y: 100 },
     draggable: true,
-    sourcePosition: Position.Top,
-    targetPosition: Position.Bottom,
     style: {
       border: "2px solid rgba(0, 155, 255, 1)",
       borderRadius: "5px",
@@ -69,7 +66,9 @@ const UseCases = () => {
   const flowContainerRef = useRef<HTMLDivElement | null>(null);
 
   const onConnect = (params: any) =>
-    setEdges((eds: Edge<any>[]) => addEdge(params, eds));
+    setEdges((eds: Edge<any>[]) =>
+      addEdge({ ...params, style: { stroke: "rgba(0, 155, 255, 1)" } }, eds)
+    );
 
   const handleComponentClick = (id: number) => {
     setSelectedComponent((prev) => (prev === id ? null : id));
