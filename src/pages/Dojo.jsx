@@ -1,33 +1,73 @@
 import { Search } from "lucide-react";
 import UseCases from "../components/useCases";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import { FaChevronCircleRight } from "react-icons/fa";
 
 const Dojo = () => {
   const [selectedSector, setSelectedSector] = useState("bg-second_blue");
+  const sectorsRef = useRef(null); // Ref to the sectors container
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
   const handleSelectedColor = () => {
     if (selectedSector === "bg-second_blue") {
       setSelectedSector("bg-blue");
-    }else{
+    } else {
       setSelectedSector("bg-second_blue");
-
     }
   };
 
+  // Scroll the sectors container left or right
+  const scrollSectors = (direction) => {
+    if (sectorsRef.current) {
+      const scrollAmount = direction === "left" ? -200 : 200; // Adjust the scroll amount as needed
+      sectorsRef.current.scrollBy({
+        left: scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
+  // Check if the container can scroll left or right
+  useEffect(() => {
+    const checkScrollPosition = () => {
+      if (sectorsRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = sectorsRef.current;
+        setCanScrollLeft(scrollLeft > 0); // Can scroll left if scrollLeft > 0
+        setCanScrollRight(scrollLeft + clientWidth < scrollWidth); // Can scroll right if not at the end
+      }
+    };
+
+    // Initial check
+    checkScrollPosition();
+
+    // Event listener for scroll event to check scroll position
+    if (sectorsRef.current) {
+      sectorsRef.current.addEventListener("scroll", checkScrollPosition);
+    }
+
+    // Cleanup event listener
+    return () => {
+      if (sectorsRef.current) {
+        sectorsRef.current.removeEventListener("scroll", checkScrollPosition);
+      }
+    };
+  }, []);
+
   return (
-    <section className=" p-6 w-full">
-      <div className=" bg-primary rounded-xl w-full p-3">
-        <h1 className=" font-poppins font-semibold text-2xl">
+    <section className="p-6 w-[calc(100vw-342px)]">
+      <div className="bg-primary rounded-xl w-full p-3">
+        <h1 className="font-poppins font-semibold text-2xl">
           Welcome to the Dôjo Factory
         </h1>
-        <p className=" text-gray-400">
+        <p className="text-gray-400">
           The factory of building or optimizing use cases
         </p>
       </div>
-      <div className=" flex justify-between mt-6">
+      <div className="flex justify-between mt-6">
         <div>
           <div className="font-poppins">Pre Defined Use Cases</div>
-          <p className=" text-gray-400">
+          <p className="text-gray-400">
             You can directly leverage or optimize.
           </p>
         </div>
@@ -42,27 +82,44 @@ const Dojo = () => {
           </div>
           <button
             onClick={handleSelectedColor}
-            className={`${selectedSector} cursor-pointer tracking-wide text-white font-semibold text-[14px] rounded-lg p-2  `}
+            className={`${selectedSector} cursor-pointer tracking-wide text-white font-semibold text-[14px] rounded-lg p-2`}
           >
             Optimize Use Case
           </button>
-          <button className="bg-second_blue cursor-pointer tracking-wide text-white font-semibold text-[14px] rounded-lg p-2  ">
+          <button className="bg-second_blue cursor-pointer tracking-wide text-white font-semibold text-[14px] rounded-lg p-2">
             Add Use Case to Home
           </button>
         </div>
       </div>
-      <ul className=" mt-4 flex list-none gap-2 text-nowrap w-full overflow-y-scroll scrollbar-hide">
-        {[...Array(5)].map((_, index) => (
-          <li
-            key={index}
-            className="p-3 pb-5 rounded-xl w-[164px] h-[75px] bg-light_blue border border-light-gray shrink-0"
-          >
-            <h2 className="font-bold">Sector {index + 1}</h2>
-            <p>Custom Name</p>
-          </li>
-        ))}
-      </ul>
-      <h1 className=" my-3 font-bold text-[16px] font-poppins">
+      <div className="flex items-center gap-4 mt-4 relative">
+        {canScrollLeft && (
+          <FaChevronCircleRight
+            className="cursor-pointer rotate-180 text-white bg-black rounded-full font-extrabold w-8 h-8 absolute -left-3 top-1/2 -translate-y-1/2 mt-2 "
+            onClick={() => scrollSectors("left")}
+          />
+        )}
+        <ul
+          ref={sectorsRef}
+          className="mt-4 flex list-none gap-2 text-nowrap overflow-hidden overflow-x-auto scrollbar-hide"
+        >
+          {[...Array(15)].map((_, index) => (
+            <li
+              key={index}
+              className="p-3 pb-5 rounded-xl w-[164px] h-[75px] bg-light_blue border border-light-gray shrink-0"
+            >
+              <h2 className="font-bold">Sector {index + 1}</h2>
+              <p>Custom Name</p>
+            </li>
+          ))}
+        </ul>
+        {canScrollRight && (
+          <FaChevronCircleRight
+            className="cursor-pointer text-white bg-black rounded-full font-extrabold w-8 h-8 absolute -right-2 top-1/2 -translate-y-1/2 mt-2 "
+            onClick={() => scrollSectors("right")}
+          />
+        )}
+      </div>
+      <h1 className="my-3 font-bold text-[16px] font-poppins">
         Create and Optimize Use Cases
       </h1>
       <UseCases />

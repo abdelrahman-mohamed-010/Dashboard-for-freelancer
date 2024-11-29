@@ -6,7 +6,7 @@ const Layout = () => {
   return (
     <div className="flex max-w-screen">
       <Sidebar />
-      <div className=" flex flex-col w-full">
+      <div className=" flex flex-col flex-grow ">
         <Navbar />
         <Outlet />
       </div>
