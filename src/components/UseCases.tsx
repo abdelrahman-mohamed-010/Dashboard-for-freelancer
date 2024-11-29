@@ -1,6 +1,5 @@
 import Modal from "./Modal";
 import ShowModal from "./ShowSavedCases";
-
 import { Box, ChevronDown, CirclePlus, CornerUpRight } from "lucide-react";
 import { useState, useRef } from "react";
 import ReactFlow, {
@@ -11,6 +10,7 @@ import ReactFlow, {
   Node,
   Edge,
   useEdgesState,
+  Position,
   useNodesState,
 } from "react-flow-renderer";
 import "reactflow/dist/style.css";
@@ -18,10 +18,27 @@ import "reactflow/dist/style.css";
 const initialNodes: Node[] = [
   {
     id: "1",
-    type: "input",
-    data: { label: "Component A" },
+    data: {
+      label: (
+        <div className="flex flex-col items-start">
+          <div className="flex items-center font-semibold">
+            <Box className="w-4 h-4 mr-2" /> {/* Icon and text */}
+            Component A
+          </div>
+          <p className="text-gray-500 mt-1">Property</p> {/* Gray text below */}
+        </div>
+      ),
+    },
+    type: "custom",
     position: { x: 400, y: 100 },
     draggable: true,
+    sourcePosition: Position.Top,
+    targetPosition: Position.Bottom,
+    style: {
+      border: "2px solid rgba(0, 155, 255, 1)",
+      borderRadius: "5px",
+      padding: "10px",
+    },
   },
 ];
 
@@ -39,6 +56,13 @@ const UseCases = () => {
   const [selectedComponent, setSelectedComponent] = useState<number | null>(
     null
   );
+
+  const [selectedChildComp, setSelectedChildComp] = useState<number | null>(
+    null
+  );
+  const [ShowselectedChildComp, SetShowSelectedChildComp] = useState<
+    string | null
+  >(null);
   const [showModal, setShowModal] = useState(false);
   const [useCases, setUseCases] = useState<UseCase[]>([]);
   const [showCases, setShowCases] = useState(false);
@@ -51,12 +75,33 @@ const UseCases = () => {
     setSelectedComponent((prev) => (prev === id ? null : id));
   };
 
+  const handleComponentChildClick = (id: number) => {
+    setSelectedChildComp((prev) => (prev === id ? null : id));
+  };
+
   const handleCreateNewUseComponent = (letter: string) => {
+    SetShowSelectedChildComp(letter);
     const newNode: Node = {
       id: `${nodes.length + 1}`,
-      data: { label: `Component ${letter}` },
+      data: {
+        label: (
+          <div className="flex flex-col items-start">
+            <div className="flex items-center font-semibold">
+              <Box className="w-4 h-4 mr-2" /> {/* Icon and text */}
+              Component {letter}
+            </div>
+            <p className="text-gray-500 mt-1">Property</p>{" "}
+            {/* Gray text below */}
+          </div>
+        ),
+      },
       position: { x: 500, y: 400 },
       draggable: true,
+      style: {
+        border: "2px solid rgba(0, 155, 255, 1)",
+        borderRadius: "5px",
+        padding: "10px",
+      },
     };
 
     setNodes((prevNodes: any) => [...prevNodes, newNode]);
@@ -79,6 +124,7 @@ const UseCases = () => {
   const handleCreateNewUseCase = () => {
     setNodes(initialNodes);
     setEdges(initialEdges);
+    SetShowSelectedChildComp(null);
   };
 
   return (
@@ -101,16 +147,18 @@ const UseCases = () => {
             <div className=" flex flex-col gap-2">
               <button
                 onClick={handleCreateNewUseCase}
-                className="font-bold z-30 flex gap-6 items-center bg-white rounded-lg border border-light-gray p-3 shadow-lg"
+                className="font-bold z-30 flex gap-6 items-center bg-white rounded-lg border border-light-gray p-3 shadow-md "
               >
                 Create New Use Case <CirclePlus className="text-tertiary" />
               </button>
-              <button className="w-[300px] text-sm text-nowrap flex justify-between items-center bg-white rounded-lg border border-light-gray p-4 shadow-md hover:bg-gray-100 transition">
+              <button className=" cursor-default w-[300px] text-sm text-nowrap flex justify-between items-center bg-white rounded-lg border border-light-gray p-4 shadow-md ">
                 <span className="text-tertiary font-semibold mr-4">
                   Use Case : Use Case 1
                 </span>
                 <CornerUpRight className="font-bold w-5 h-5 text-black" />
-                <span className="text-xs font-thin ml-2">{edges.length} Connections</span>
+                <span className="text-xs font-thin ml-2">
+                  {edges.length} Connections
+                </span>
               </button>
             </div>
 
@@ -181,6 +229,54 @@ const UseCases = () => {
             })}
           </div>
         </div>
+        {ShowselectedChildComp !== null && (
+          <div className=" absolute right-0 w-[307px] overflow-scroll scrollbar-hide text-sm text-nowrap flex flex-col justify-between font-bold bg-white rounded-lg border border-light-gray p-3 pb-2 shadow-lg h-fit z-30  ">
+            <h3 className=" flex items-center gap-2 text-xl mb-5">
+              <Box /> Component {ShowselectedChildComp}
+            </h3>
+            {Array.from({ length: 4 }).map((_, index) => {
+              const componentId = index + 1;
+              return (
+                <div
+                  key={componentId}
+                  className={`flex flex-col border-light-gray border-2 p-2 py-3 gap-3 bg-light-gray rounded-lg r mb-2 ${
+                    selectedChildComp === componentId
+                      ? " bg-primary"
+                      : " bg-white"
+                  }`}
+                  onClick={() => handleComponentChildClick(componentId)}
+                >
+                  <div
+                    className={` flex justify-between items-center font-bold font-poppins `}
+                  >
+                    <span>Property {componentId}</span>
+                    <ChevronDown
+                      className={` w-5 h-5 mr-2 ${
+                        selectedChildComp === componentId ? " rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+
+                  {selectedChildComp === componentId && (
+                    <div className="flex flex-col gap-3">
+                      <div className="text-sm flex gap-3 items-center cursor-pointer text-gray-700 p-2  border-light-gray rounded-lg">
+                        <Box className=" w-4 h-4" /> Component A
+                      </div>
+
+                      <div className="text-sm flex gap-3 items-center cursor-pointer text-gray-700 p-2  border-light-gray rounded-lg">
+                        <Box className=" w-4 h-4" /> Component B
+                      </div>
+                      <div className="text-sm flex gap-3 items-center cursor-pointer text-gray-700 p-2 border-light-gray rounded-lg">
+                        <Box className=" w-4 h-4" /> Component C
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <div className=" absolute bottom-7 right-2 z-10">
           <button
             onClick={handleSaveUseCase}
