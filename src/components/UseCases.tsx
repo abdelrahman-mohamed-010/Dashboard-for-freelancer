@@ -1,7 +1,7 @@
 import Modal from "./Modal";
 import ShowModal from "./ShowSavedCases";
 
-import { ChevronDown, CirclePlus } from "lucide-react";
+import { Box, ChevronDown, CirclePlus } from "lucide-react";
 import { useState, useRef } from "react";
 import ReactFlow, {
   Controls,
@@ -13,6 +13,7 @@ import ReactFlow, {
   useEdgesState,
   useNodesState,
 } from "react-flow-renderer";
+import "reactflow/dist/style.css";
 
 const initialNodes: Node[] = [
   {
@@ -144,23 +145,23 @@ const UseCases = () => {
                   {selectedComponent === componentId && (
                     <div className="flex flex-col gap-3">
                       <div
-                        className="text-sm cursor-pointer text-gray-700 p-2 bg-white border-light-gray rounded-lg"
+                        className="text-sm flex gap-3 items-center cursor-pointer text-gray-700 p-2 bg-white border-light-gray rounded-lg"
                         onClick={() => handleCreateNewUseComponent("A")}
                       >
-                        Component A
+                        <Box className=" w-4 h-4" /> Component A
                       </div>
 
                       <div
                         onClick={() => handleCreateNewUseComponent("B")}
-                        className="text-sm cursor-pointer text-gray-700 p-2 bg-white border-light-gray rounded-lg"
+                        className="text-sm flex gap-3 items-center cursor-pointer text-gray-700 p-2 bg-white border-light-gray rounded-lg"
                       >
-                        Component B
+                        <Box className=" w-4 h-4" /> Component B
                       </div>
                       <div
                         onClick={() => handleCreateNewUseComponent("C")}
-                        className="text-sm cursor-pointer text-gray-700 p-2 bg-white border-light-gray rounded-lg"
+                        className="text-sm flex gap-3 items-center cursor-pointer text-gray-700 p-2 bg-white border-light-gray rounded-lg"
                       >
-                        Component C
+                        <Box className=" w-4 h-4" /> Component C
                       </div>
                     </div>
                   )}
