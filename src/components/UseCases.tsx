@@ -1,7 +1,7 @@
 import Modal from "./Modal";
 import ShowModal from "./ShowSavedCases";
 
-import { Box, ChevronDown, CirclePlus } from "lucide-react";
+import { Box, ChevronDown, CirclePlus, CornerUpRight } from "lucide-react";
 import { useState, useRef } from "react";
 import ReactFlow, {
   Controls,
@@ -98,12 +98,22 @@ const UseCases = () => {
       >
         <div className="absolute top-3 left-3 flex flex-col gap-3 z-10 h-full">
           <div className="flex gap-3">
-            <button
-              onClick={handleCreateNewUseCase}
-              className="font-bold z-30 flex gap-6 items-center bg-white rounded-lg border border-light-gray p-3 shadow-lg"
-            >
-              Create New Use Case <CirclePlus className="text-tertiary" />
-            </button>
+            <div className=" flex flex-col gap-2">
+              <button
+                onClick={handleCreateNewUseCase}
+                className="font-bold z-30 flex gap-6 items-center bg-white rounded-lg border border-light-gray p-3 shadow-lg"
+              >
+                Create New Use Case <CirclePlus className="text-tertiary" />
+              </button>
+              <button className="w-[300px] text-sm text-nowrap flex justify-between items-center bg-white rounded-lg border border-light-gray p-4 shadow-md hover:bg-gray-100 transition">
+                <span className="text-tertiary font-semibold mr-4">
+                  Use Case : Use Case 1
+                </span>
+                <CornerUpRight className="font-bold w-5 h-5 text-black" />
+                <span className="text-xs font-thin ml-2">5 Connections</span>
+              </button>
+            </div>
+
             <div className=" flex flex-col">
               <button
                 onClick={() => {
@@ -113,6 +123,7 @@ const UseCases = () => {
               >
                 Your Use Cases <ChevronDown />
               </button>
+
               <div className="flex flex-col absolute gap-1 z-30 mt-14">
                 {useCases.length > 0 &&
                   showCases === true &&
@@ -134,7 +145,7 @@ const UseCases = () => {
               return (
                 <div
                   key={componentId}
-                  className="flex flex-col bg-primary p-2 py-4 gap-3 bg-light-gray rounded-lg r mb-2"
+                  className="flex flex-col bg-primary p-2 py-3 gap-3 bg-light-gray rounded-lg r mb-2"
                   onClick={() => handleComponentClick(componentId)}
                 >
                   <div className=" flex justify-between items-center font-bold font-poppins">
@@ -173,9 +184,12 @@ const UseCases = () => {
         <div className=" absolute bottom-7 right-2 z-10">
           <button
             onClick={handleSaveUseCase}
-            className="font-bold flex gap-6 items-center bg-tertiary text-white rounded-lg border border-light-gray p-3 shadow-lg"
+            className="font-semibold ml-[54px] mb-2 flex gap-6 items-center bg-tertiary text-white rounded-lg border border-light-gray p-3 shadow-lg"
           >
             Save Use Case
+          </button>
+          <button className="font-semibold flex gap-6 items-center bg-second_blue text-white rounded-lg border border-light-gray p-3 shadow-lg">
+            add use case to home
           </button>
         </div>
 
