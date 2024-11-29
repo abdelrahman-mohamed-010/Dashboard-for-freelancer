@@ -110,7 +110,7 @@ const UseCases = () => {
                   Use Case : Use Case 1
                 </span>
                 <CornerUpRight className="font-bold w-5 h-5 text-black" />
-                <span className="text-xs font-thin ml-2">5 Connections</span>
+                <span className="text-xs font-thin ml-2">{edges.length} Connections</span>
               </button>
             </div>
 
